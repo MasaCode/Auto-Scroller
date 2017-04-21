@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <Title>Auto Scroller</Title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <meta lang="en">
+
+    <!-- for reset -->
+    <link rel="stylesheet" href="common/css/reset.css">
+    <link rel="stylesheet" href="common/css/autoScroller.css">
+</head>
+
+<body onload="onLoadFunction()">
+<div>
+    <div class="content content1">
+        <h2>Content1</h2>
+    </div>
+    <div class="content content2">
+        <h2>Content2</h2>
+    </div>
+    <div class="content content3">
+        <h2>Content3</h2>
+    </div>
+    <div class="content content4">
+        <h2>Content4</h2>
+    </div>
+    <div class="content content5">
+        <h2>Content5</h2>
+    </div>
+    <div class="content content6">
+        <h2>Content6</h2>
+    </div>
+</div>
+</body>
+<script src="common/js/autoScroller.js"></script>
+<script>
+    function onLoadFunction()
+    {
+        var scroller = new AutoScroller({
+            selector: "div.content",
+            scrollDistance: 15,
+            disableDuration: 300,
+        });
+    }
+</script>
+</html>

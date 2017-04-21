@@ -1,0 +1,42 @@
+div.content {
+    width: 100vw;
+    height: 100vh;
+}
+
+div.content1 {
+    background-color: lightblue;
+    color: red;
+}
+
+div.content2 {
+    background-color: lightgreen;
+    color: purple;
+}
+
+div.content3 {
+    background-color: yellow;
+    color: navy;
+}
+
+div.content4 {
+    background-color: lightcoral;
+    color: green;
+}
+
+div.content5 {
+    background-color: red;
+    color: yellow;
+}
+
+div.content6 {
+    background-color: purple;
+    color: lightblue;
+}
+
+div.content h2{
+    font-size: 40px;
+    vertical-align: middle;
+    text-align: center;
+    margin: 0 auto;
+    padding-top: 100px;
+}
