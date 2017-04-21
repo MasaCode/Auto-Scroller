@@ -19,6 +19,7 @@ AutoScroller.prototype = {
     targetAnchor: null,
     targetTop: 0,
     animationFrameId: -1,
+    clearTimerId: -1,
     direction : 0, /* Up : -1, Down 1 */
     screenHeight: 0,
     startedTopPosition: 0,
@@ -95,6 +96,7 @@ AutoScroller.prototype = {
             this.change = Math.abs(this.scrollDistance / this.actualDistance);
             this.screenHeight = window.innerHeight;
             this.update();
+            this.clearTimerId = setTimeout(this.endScroll.bind(this), 5000);
         } else {
             setTimeout(this.endScroll.bind(this), 100);
         }
@@ -103,6 +105,8 @@ AutoScroller.prototype = {
     endScroll: function () {
         this.isScrolling = false;
         window.cancelAnimationFrame(this.animationFrameId);
+        clearTimeout(this.clearTimerId);
+        this.clearTimerId = -1;
         this.animationFrameId = -1;
         this.targetAnchorIndex = -1;
         this.direction = 0;
