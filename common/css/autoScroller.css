@@ -4,32 +4,56 @@ div.content {
 }
 
 div.content1 {
-    background-color: lightblue;
+    background: url('../images/image1.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
     color: red;
 }
 
 div.content2 {
-    background-color: lightgreen;
+    background: url('../images/image2.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
     color: purple;
 }
 
 div.content3 {
-    background-color: yellow;
+    background: url('../images/image3.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
     color: navy;
 }
 
 div.content4 {
-    background-color: lightcoral;
+    background: url('../images/image4.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
     color: green;
 }
 
 div.content5 {
-    background-color: red;
+    background: url('../images/image1.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
     color: yellow;
 }
 
 div.content6 {
-    background-color: purple;
+    background: url('../images/image2.jpg') no-repeat center center fixed;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    background-size: cover;
+    -o-background-size: cover;
     color: lightblue;
 }
 
