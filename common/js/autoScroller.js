@@ -29,12 +29,16 @@ AutoScroller.prototype = {
     entryFunc: null,
     effectFunc: null,
     disableDuration: 450,
+    callbackObject: null,
+    useCallback: false,
+    callTogether: false,
+    noticeEnd: false,
 
     initialize: function (options) {
         if (typeof options === 'string') {
             this.selector = this.getClassName(options);
             this.anchors = document.querySelectorAll(options);
-            this.effectFunc = 'autoScroll';
+            this.effectFunc = 'autoscroll';
         } else {
             if (options.selector === undefined || options.selector === null) {
                 console.log(new Error('Selector is undefined...'));
@@ -42,9 +46,16 @@ AutoScroller.prototype = {
             }
             this.selector = this.getClassName(options.selector);
             this.anchors = document.querySelectorAll(options.selector);
-            this.effectFunc = (typeof this[options.func] === 'function') ? options.func : 'autoScroll';
+            this.effectFunc = (typeof this[options.func.toLowerCase()] === 'function') ? options.func.toLowerCase() : 'autoscroll';
             this.scrollDistance = (typeof options.scrollDistance === 'number') ? options.scrollDistance : this.scrollDistance;
             this.disableDuration = (typeof  options.disableDuration === 'number') ? options.disableDuration : this.disableDuration;
+        }
+
+        if (options.callback) {
+            this.callTogether = options.callback.callTogether;
+            this.useCallback = true;
+            this.callbackObject = options.callback.object;
+            this.noticeEnd = options.callback.noticeEnd;
         }
 
         var anchorLength = this.anchors.length;
@@ -104,8 +115,9 @@ AutoScroller.prototype = {
             this.targetTop = this.startedTopPosition + this.actualDistance;
             this.change = Math.abs(this.scrollDistance / this.actualDistance);
             this.screenHeight = window.innerHeight;
+            if (this.useCallback) this.callbackObject.start(this.targetAnchor, this.targetAnchorIndex, this.actualDistance, this.change, this.endScroll.bind(this));
             this.update();
-            this.clearTimerId = setTimeout(this.endScroll.bind(this), 5000);
+            this.clearTimerId = setTimeout(this.endScroll.bind(this), 10000);
         } else {
             setTimeout(this.endScroll.bind(this), 100);
         }
@@ -139,9 +151,17 @@ AutoScroller.prototype = {
 
         this.startedAt += this.change;
         this[this.effectFunc](this.startedAt);
+        if (this.useCallback && this.callTogether) this.callbackObject.update(this.startedAt);
 
         if (this.startedAt >= 1.0) {
-            setTimeout(this.endScroll.bind(this), this.disableDuration);
+            if (this.useCallback){
+                if (this.callTogether) {
+                    this.callbackObject.finish();
+                } else {
+                    this.callbackObject.update();
+                }
+            }
+            if (!this.noticeEnd) setTimeout(this.endScroll.bind(this), this.disableDuration);
         } else {
             this.animationFrameId = window.requestAnimationFrame(this.update.bind(this));
         }
@@ -179,6 +199,13 @@ AutoScroller.prototype = {
         this.anchors[index].addEventListener("DOMMouseScroll", this.entryFunc, false);
     },
 
+    registerCallback: function (callback) {
+        this.callbackObject = callback.object;
+        this.callTogether = callback.callTogether;
+        this.noticeEnd = callback.noticeEnd;
+        this.useCallback = true;
+    },
+
     calculateElementTop: function (element) {
         var top = 0;
         while (element) {
@@ -212,7 +239,7 @@ AutoScroller.prototype = {
         return null;
     },
 
-    autoScroll: function (playback) {
+    autoscroll: function (playback) {
         var top = this.startedTopPosition + this.actualDistance * playback;
         if (this.direction === 1) {
             top = (top >= this.targetTop) ? this.targetTop : top;
@@ -225,18 +252,18 @@ AutoScroller.prototype = {
 
     easeoutquad: function (playback) {
         playback = playback * (2 - playback);
-        this.autoScroll(playback);
+        this.autoscroll(playback);
     },
 
     easeinquad: function (playback) {
         playback = playback * playback;
-        this.autoScroll(playback);
+        this.autoscroll(playback);
     },
 
     elastic: function (playback) {
         var x = 1.5;
         playback = Math.pow(2, 10 * (playback - 1)) * Math.cos(20 * Math.PI * x / 3 * playback);
-        this.autoScroll(playback);
+        this.autoscroll(playback);
     },
 
     bounce: function (playback) {
@@ -248,13 +275,13 @@ AutoScroller.prototype = {
         } else if (playback > 1.0) {
             playback -= (playback - 1) * 2;
         }
-        this.autoScroll(playback);
+        this.autoscroll(playback);
     },
 
     backslidein: function (playback) {
         var x = 1.5;
         playback = Math.pow(playback, 2) * ((1 + x) * playback - x);
-        this.autoScroll(playback);
+        this.autoscroll(playback);
     },
 };
 
