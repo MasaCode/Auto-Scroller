@@ -40,8 +40,13 @@ var scroller = new AutoScroller({
 ## Configuration options
 **Selector**  ID or Class to select image slide wrapper
 ```js
-selector : '#id'
-selector : '.class'
+selector: '#id'
+selector: '.class'
+```
+
+**Func** The name of effect function
+```js
+func: 'autoScroll'
 ```
 
 **scrollDistance** Number scroll distance per frame
