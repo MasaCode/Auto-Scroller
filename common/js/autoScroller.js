@@ -7,6 +7,7 @@
 function AutoScroller(options) {
     this.initializeAnimationFrame();
     this.initialize(options);
+    return this;
 }
 
 AutoScroller.prototype = {
