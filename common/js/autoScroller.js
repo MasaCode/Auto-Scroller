@@ -194,5 +194,33 @@ AutoScroller.prototype = {
 
         window.scrollTo(0, top);
     },
+
+    easeoutquad: function (playback) {
+        playback = playback * (2 - playback);
+        this.autoScroll(playback);
+    },
+
+    easeinquad: function (playback) {
+        playback = playback * playback;
+        this.autoScroll(playback);
+    },
+
+    bounce: function (playback) {
+        var bounce = 1.20;
+        var turnpoint = 1.10;
+        playback = playback * bounce * (2 - playback);
+        if (playback > turnpoint) {
+            playback = 1 - (bounce - playback);
+        } else if (playback > 1.0) {
+            playback -= (playback - 1) * 2;
+        }
+        this.autoScroll(playback);
+    },
+
+    backslidein: function (playback) {
+        var x = 1.5;
+        playback = Math.pow(playback, 2) * ((1 + x) * playback - x);
+        this.autoScroll(playback);
+    },
 };
 
