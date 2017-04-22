@@ -138,17 +138,6 @@ AutoScroller.prototype = {
         }
     },
 
-    autoScroll: function (playback) {
-        var top = this.startedTopPosition + this.actualDistance * playback;
-        if (this.direction === 1) {
-            top = (top >= this.targetTop) ? this.targetTop : top;
-        } else {
-            top = (top <= this.targetTop) ? this.targetTop : top;
-        }
-
-        window.scrollTo(0, top);
-    },
-
     resetAnchors: function (selector) {
         if (selector === undefined || selector === null) {
             console.log(new Error('Selector is undefined...'));
@@ -193,6 +182,17 @@ AutoScroller.prototype = {
             element = element.offsetParent;
         }
         return top;
+    },
+
+    autoScroll: function (playback) {
+        var top = this.startedTopPosition + this.actualDistance * playback;
+        if (this.direction === 1) {
+            top = (top >= this.targetTop) ? this.targetTop : top;
+        } else {
+            top = (top <= this.targetTop) ? this.targetTop : top;
+        }
+
+        window.scrollTo(0, top);
     },
 };
 
