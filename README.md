@@ -4,10 +4,9 @@
 
 ## Installation
 #### Step 1 : Download file and link required files
-First, you need to download autoScroller.js and autoScroller.css files from this repo.
-Next, link javascript and css file.
+First, you need to download autoScroller.js file from this repo.
+Next, link javascript file.
 ```HTML
-<link rel="stylesheet" href="common/css/autoScroller.css" />
 <script src="common/js/autoScroller.js" /></script>
 ```
 #### Step2 : Create HTML Markup
@@ -24,7 +23,7 @@ Create a `DOM Element` with class or ID
 </div>
 ```
 #### Step3 : Create AutoScroller instance
-Create a instance of AutoScroller to initialize and make it work it.
+Create a instance of AutoScroller to initialize and make it work.
 ```js
 var scroller = new AutoScroller('.anchor');
 ```
