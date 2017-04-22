@@ -36,11 +36,10 @@
 </body>
 <script src="common/js/autoScroller.js"></script>
 <script>
-    function onLoadFunction()
-    {
+    window.onload = function () {
         var scroller = new AutoScroller({
             selector: "div.content",
-            scrollDistance: 10,
+            scrollDistance: 4,
             disableDuration: 200,
             func: 'bounce',
         });

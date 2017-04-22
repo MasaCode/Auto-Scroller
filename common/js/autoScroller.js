@@ -205,6 +205,12 @@ AutoScroller.prototype = {
         this.autoScroll(playback);
     },
 
+    elastic: function (playback) {
+        var x = 1.5;
+        playback = Math.pow(2, 10 * (playback - 1)) * Math.cos(20 * Math.PI * x / 3 * playback);
+        this.autoScroll(playback);
+    },
+
     bounce: function (playback) {
         var bounce = 1.20;
         var turnpoint = 1.10;
