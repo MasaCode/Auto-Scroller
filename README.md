@@ -33,7 +33,8 @@ Also you can customize it by setting option values
 var scroller = new AutoScroller({
     selector     : '.anchor',
     scrollDistance: 15,
-    disableDuration: 300
+    disableDuration: 300,
+    func: 'bounce'
 });
 ```
 
@@ -47,6 +48,7 @@ selector: '.class'
 **Func** The name of effect function
 ```js
 func: 'autoScroll'
+func:'bounce'
 ```
 
 **scrollDistance** Number scroll distance per frame
