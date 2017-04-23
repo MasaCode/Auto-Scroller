@@ -10,7 +10,7 @@ Next, link javascript file.
 <script src="common/js/autoScroller.js" /></script>
 ```
 #### Step2 : Create HTML Markup
-Create a `DOM Element` with class or ID 
+Create a `DOM Element` with class
 ```HTML
 <div class="anchor">
     <img src="common/images/image1.jpg">
@@ -38,9 +38,8 @@ var scroller = new AutoScroller({
 ```
 
 ## Configuration options
-**Selector**  ID or Class to select image slide wrapper
+**Selector**  Class to select image slide wrapper
 ```js
-selector: '#id'
 selector: '.class'
 ```
 
