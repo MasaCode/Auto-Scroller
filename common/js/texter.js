@@ -20,8 +20,11 @@ Texter.prototype = {
     interval: 100,
     func: 'typewriter',
     callback: null,
+    delay: 2000,
+    autoStart: false,
 
     initialize: function (options) {
+        var _self = this;
         if (!options.selector) {
             console.log(new Error('Invalid selector....'));
         }
@@ -33,12 +36,18 @@ Texter.prototype = {
 
         if (typeof options.interval === 'number') this.interval = options.interval;
         if (typeof options.func === 'string' && typeof this[options.func.toLowerCase()] === 'function') this.func = options.func.toLowerCase();
+        if (typeof  options.delay === 'number') this.delay = options.delay;
+        this.autoStart = (options.autoStart === true);
 
         for (var i = 0; i < this.elementLength; i++) {
             var text = this.elements[i].innerText.trim();
             var length = text.length;
             this.texts.push({text: text, length: length});
         }
+
+        if (this.autoStart) setTimeout(function() {
+            _self.start(_self.elements[0], 0, 0, 0, null);
+        }, this.delay);
     },
 
     start: function (target, index, distance, change, callback) {
