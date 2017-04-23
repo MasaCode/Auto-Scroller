@@ -13,13 +13,25 @@ Next, link javascript file.
 Create a `DOM Element` with class
 ```HTML
 <div class="anchor">
-    <img src="common/images/image1.jpg">
+    <div class="text">
+        Polaroid pinterest flannel, godard wolf gochujang gluten-free 
+        live-edge literally air plant YOLO aesthetic ramps. Quinoa ugh 
+        disrupt normcore trust fund hella. Vice green juice DIY bespoke.
+    </div>
 </div>
 <div class="anchor">
-    <img src="common/images/image2.jpg">
+    <div class="text">
+        Polaroid pinterest flannel, godard wolf gochujang gluten-free 
+        live-edge literally air plant YOLO aesthetic ramps. Quinoa ugh 
+        disrupt normcore trust fund hella. Vice green juice DIY bespoke.
+    </div>
 </div>
 <div class="anchor">
-    <img src="common/images/image3.jpg">
+    <div class="text">
+        Polaroid pinterest flannel, godard wolf gochujang gluten-free 
+        live-edge literally air plant YOLO aesthetic ramps. Quinoa ugh 
+        disrupt normcore trust fund hella. Vice green juice DIY bespoke.
+    </div>
 </div>
 ```
 #### Step3 : Create AutoScroller instance
@@ -30,10 +42,15 @@ var scroller = new AutoScroller('.anchor');
 Also you can customize it by setting option values
 ```js
 var scroller = new AutoScroller({
-    selector     : '.anchor',
-    scrollDistance: 15,
-    disableDuration: 300,
-    func: 'bounce'
+    selector: ".anchor",
+    scrollDistance: 4,
+    disableDuration: 200,
+    func: 'bounce',
+    callback: {
+        object: callbackObject,
+        callTogether: false,
+        noticeEnd: true,
+    },
 });
 ```
 
@@ -59,6 +76,20 @@ scrollDistance: 30
 ```js
 disableDuration: 300
 disableDuration: 450
+```
+
+#### **Callback** callback object and property to interact with AutoScroller
+**object** Instance of object that interacts with AutoScrollerr
+
+**callTogether** Set true if you want to interact when scrolling
+
+**noticeEnd** Set true if you want to disable scrolling while other object interacting and notify end of interaction via callback
+```js
+callback: {
+    object: callbackObject,
+    callTogether: false,
+    noticeEnd: true
+}
 ```
 
 ## License
