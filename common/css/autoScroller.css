@@ -9,7 +9,7 @@ div.content1 {
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
-    color: red;
+    color: black;
 }
 
 div.content2 {
@@ -18,7 +18,7 @@ div.content2 {
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
-    color: purple;
+    color: white;
 }
 
 div.content3 {
@@ -27,7 +27,7 @@ div.content3 {
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
-    color: navy;
+    color: purple;
 }
 
 div.content4 {
@@ -36,7 +36,7 @@ div.content4 {
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
-    color: green;
+    color: red;
 }
 
 div.content5 {
@@ -45,7 +45,7 @@ div.content5 {
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
-    color: yellow;
+    color: black;
 }
 
 div.content6 {
@@ -54,7 +54,7 @@ div.content6 {
     -moz-background-size: cover;
     background-size: cover;
     -o-background-size: cover;
-    color: lightblue;
+    color: white;
 }
 
 div.content h2{
@@ -62,5 +62,6 @@ div.content h2{
     vertical-align: middle;
     text-align: center;
     margin: 0 auto;
-    padding-top: 100px;
+    padding-top: 80px;
+    padding-bottom: 50px;
 }

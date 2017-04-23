@@ -11,6 +11,7 @@ function AutoScroller(options) {
 }
 
 AutoScroller.prototype = {
+    selector: null,
     anchors: null,
     scrollDistance: 15,
     isScrolling: false,
@@ -31,6 +32,7 @@ AutoScroller.prototype = {
 
     initialize: function (options) {
         if (typeof options === 'string') {
+            this.selector = this.getClassName(options);
             this.anchors = document.querySelectorAll(options);
             this.effectFunc = 'autoScroll';
         } else {
@@ -38,6 +40,7 @@ AutoScroller.prototype = {
                 console.log(new Error('Selector is undefined...'));
                 return;
             }
+            this.selector = this.getClassName(options.selector);
             this.anchors = document.querySelectorAll(options.selector);
             this.effectFunc = (typeof this[options.func] === 'function') ? options.func : 'autoScroll';
             this.scrollDistance = (typeof options.scrollDistance === 'number') ? options.scrollDistance : this.scrollDistance;
@@ -77,17 +80,22 @@ AutoScroller.prototype = {
         var delta = (event.wheelDeltaY || -event.deltaY);
         var anchorLength = this.anchors.length;
         this.direction = (delta > 0) ? -1 : 1;
-        for (var i = 0; i < anchorLength; i++) {
-            if (event.srcElement === this.anchors[i]) {
-                if ((i === 0 && this.direction === -1) || (i === (anchorLength - 1) && this.direction === 1)) {
-                    canScroll = false;
-                } else {
-                    this.targetAnchorIndex = i + this.direction;
-                    this.targetAnchor = this.anchors[this.targetAnchorIndex];
-                    canScroll = true;
+        var target = (this.hasClass(event.srcElement, this.selector)) ? event.srcElement : this.findElement(event.srcElement);
+        if (target) {
+            for (var i = 0; i < anchorLength; i++) {
+                if (target === this.anchors[i]) {
+                    if ((i === 0 && this.direction === -1) || (i === (anchorLength - 1) && this.direction === 1)) {
+                        canScroll = false;
+                    } else {
+                        this.targetAnchorIndex = i + this.direction;
+                        this.targetAnchor = this.anchors[this.targetAnchorIndex];
+                        canScroll = true;
+                    }
+                    break;
                 }
-                break;
             }
+        } else {
+            canScroll = false;
         }
 
         if (canScroll) {
@@ -183,6 +191,25 @@ AutoScroller.prototype = {
             element = element.offsetParent;
         }
         return top;
+    },
+
+    hasClass: function (element, searchClass) {
+        return (" " + element.className + " " ).indexOf( " " + searchClass + " " ) > -1;
+    },
+
+    getClassName: function (selector) {
+        var classes = selector.split('.');
+        return classes.slice(1).join(' ');
+    },
+
+    findElement: function (childElement) {
+        while (childElement) {
+            if (this.hasClass(childElement, this.selector)) {
+                return childElement;
+            }
+            childElement = childElement.parentElement;
+        }
+        return null;
     },
 
     autoScroll: function (playback) {
