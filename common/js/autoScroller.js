@@ -117,7 +117,7 @@ AutoScroller.prototype = {
             this.screenHeight = window.innerHeight;
             if (this.useCallback) this.callbackObject.start(this.targetAnchor, this.targetAnchorIndex, this.actualDistance, this.change, this.endScroll.bind(this));
             this.update();
-            this.clearTimerId = setTimeout(this.endScroll.bind(this), 10000);
+            this.clearTimerId = setTimeout(this.endScroll.bind(this), 50000);
         } else {
             setTimeout(this.endScroll.bind(this), 100);
         }
