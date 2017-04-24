@@ -22,6 +22,8 @@ Texter.prototype = {
     callback: null,
     delay: 2000,
     autoStart: false,
+    useRandomInterval: false,
+    intervalRnage: 20,
 
     initialize: function (options) {
         var _self = this;
@@ -37,7 +39,9 @@ Texter.prototype = {
         if (typeof options.interval === 'number') this.interval = options.interval;
         if (typeof options.func === 'string' && typeof this[options.func.toLowerCase()] === 'function') this.func = options.func.toLowerCase();
         if (typeof  options.delay === 'number') this.delay = options.delay;
+        this.useRandomInterval = (options.useRandomInterval === true);
         this.autoStart = (options.autoStart === true);
+        this.intervalRnage = (typeof options.intervalRnage === 'number') ? options.intervalRnage : this.intervalRnage;
 
         for (var i = 0; i < this.elementLength; i++) {
             var text = this.elements[i].innerText.trim();
@@ -47,19 +51,20 @@ Texter.prototype = {
 
         if (this.autoStart) setTimeout(function() {
             _self.start(_self.elements[0], 0, 0, 0, null);
+            _self.update();
         }, this.delay);
     },
 
     start: function (target, index, distance, change, callback) {
-        this.elements[index].innerText = '';
         this.currentIndex = index;
         this.startedAt = 0;
-        this.change = 1.0 / this.texts[index].length;
+        this.initializeText();
         this.callback = callback;
     },
 
     finish: function () {
         this.elements[this.currentIndex].innerText = this.texts[this.currentIndex].text;
+        this.elements[this.currentIndex].style.opacity = 1.0;
         this.currentIndex = -1;
         this.change = 0;
         clearTimeout(this.updateId);
@@ -73,9 +78,26 @@ Texter.prototype = {
 
         if (this.startedAt >= 1.0) {
             this.finish();
-            this.callback();
+            if (this.callback) this.callback();
         } else {
-            this.updateId = window.setTimeout(this.update.bind(this), this.interval);
+            var interval = (this.useRandomInterval) ? this.interval + Math.random() * this.intervalRnage: this.interval;
+            this.updateId = window.setTimeout(this.update.bind(this), interval);
+        }
+    },
+
+    initializeText: function () {
+        switch (this.func){
+            case 'typewriter':
+            case 'rundomwriter':
+                this.change =  1.0 / this.texts[this.currentIndex].length;
+                this.elements[this.currentIndex].innerText = '';
+                break;
+            case 'fadein':
+                this.elements[this.currentIndex].style.opacity = 0.0;
+                this.change = 1.0 / this.interval;
+                break;
+            default:
+                break;
         }
     },
 
@@ -89,5 +111,9 @@ Texter.prototype = {
     rundomwriter: function (playback) {
         playback = playback + (Math.random() * 2 - 1) * this.change;
         this.typewriter(playback);
+    },
+
+    fadein: function (playback) {
+        this.elements[this.currentIndex].style.opacity = playback;
     },
 };
