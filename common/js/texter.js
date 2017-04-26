@@ -22,6 +22,7 @@ Texter.prototype = {
     callback: null,
     delay: 2000,
     autoStart: false,
+    callUpdate: true,
     useRandomInterval: false,
     intervalRnage: 20,
 
@@ -41,6 +42,7 @@ Texter.prototype = {
         if (typeof  options.delay === 'number') this.delay = options.delay;
         this.useRandomInterval = (options.useRandomInterval === true);
         this.autoStart = (options.autoStart === true);
+        this.callUpdate = (options.callUpdate !== false);
         this.intervalRnage = (typeof options.intervalRnage === 'number') ? options.intervalRnage : this.intervalRnage;
 
         for (var i = 0; i < this.elementLength; i++) {
@@ -51,7 +53,6 @@ Texter.prototype = {
 
         if (this.autoStart) setTimeout(function() {
             _self.start(_self.elements[0], 0, 0, 0, null);
-            _self.update();
         }, this.delay);
     },
 
@@ -60,6 +61,7 @@ Texter.prototype = {
         this.startedAt = 0;
         this.initializeText();
         this.callback = callback;
+        if (this.callUpdate) this.update();
     },
 
     finish: function () {
@@ -69,6 +71,7 @@ Texter.prototype = {
         this.change = 0;
         clearTimeout(this.updateId);
         this.updateId = -1;
+        if (this.callback) this.callback();
     },
 
     update: function () {
@@ -78,7 +81,6 @@ Texter.prototype = {
 
         if (this.startedAt >= 1.0) {
             this.finish();
-            if (this.callback) this.callback();
         } else {
             var interval = (this.useRandomInterval) ? this.interval + Math.random() * this.intervalRnage: this.interval;
             this.updateId = window.setTimeout(this.update.bind(this), interval);
