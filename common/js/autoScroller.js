@@ -33,6 +33,8 @@ AutoScroller.prototype = {
     useCallback: false,
     callTogether: false,
     noticeEnd: false,
+    skip: null,
+    isSkipped: false,
 
     initialize: function (options) {
         if (typeof options === 'string') {
@@ -124,6 +126,7 @@ AutoScroller.prototype = {
     },
 
     endScroll: function () {
+        var _self = this;
         this.isScrolling = false;
         window.cancelAnimationFrame(this.animationFrameId);
         clearTimeout(this.clearTimerId);
@@ -138,6 +141,16 @@ AutoScroller.prototype = {
         this.screenHeight = 0;
         this.startedTopPosition = 0;
         this.actualDistance = 0;
+        if (this.isSkipped) {
+            setTimeout(function() {
+                _self.skip.remove();
+                _self.skip = null;
+            }, 250);
+        } else {
+            this.skip.remove();
+            this.skip = null;
+        }
+        this.isSkipped = false;
     },
 
     update: function () {
@@ -158,6 +171,7 @@ AutoScroller.prototype = {
                 if (this.callTogether) {
                     this.callbackObject.finish();
                 } else {
+                    this.createSkip();
                     this.callbackObject.update();
                 }
             }
@@ -237,6 +251,26 @@ AutoScroller.prototype = {
             childElement = childElement.parentElement;
         }
         return null;
+    },
+
+    createSkip: function () {
+        this.skip = document.createElement('div');
+        var input = document.createElement('input');
+        input.value = 'X';
+        input.type = 'button';
+        input.id = 'skip-button';
+        this.skip.className = 'skip-wrapper';
+        this.skip.appendChild(input);
+
+        this.skip.onclick = this.onSkip.bind(this);
+        this.targetAnchor.appendChild(this.skip);
+    },
+
+    onSkip: function(event) {
+        event.preventDefault();
+        this.isSkipped = true;
+        this.callbackObject.finish();
+        if (!this.noticeEnd) this.endScroll();
     },
 
     autoscroll: function (playback) {
