@@ -35,6 +35,9 @@ AutoScroller.prototype = {
     noticeEnd: false,
     skip: null,
     isSkipped: false,
+    needSetScreenTop: false,
+    resizeId: 0,
+    autoResize: true,
 
     initialize: function (options) {
         if (typeof options === 'string') {
@@ -51,6 +54,7 @@ AutoScroller.prototype = {
             this.effectFunc = (typeof this[options.func.toLowerCase()] === 'function') ? options.func.toLowerCase() : 'autoscroll';
             this.scrollDistance = (typeof options.scrollDistance === 'number') ? options.scrollDistance : this.scrollDistance;
             this.disableDuration = (typeof  options.disableDuration === 'number') ? options.disableDuration : this.disableDuration;
+            this.autoResize = (options.autoResize !== false);
         }
 
         if (options.callback) {
@@ -112,6 +116,10 @@ AutoScroller.prototype = {
         }
 
         if (canScroll) {
+            if (this.autoResize) clearInterval(this.resizeId);
+            this.resizeId = -1;
+            this.needSetScreenTop = false;
+            this.needSetScreenTop = (this.targetAnchorIndex !== 0 && this.targetAnchorIndex !== this.anchors.length);
             this.startedTopPosition = document.documentElement.scrollTop || document.body.scrollTop;
             this.actualDistance = this.calculateElementTop(this.targetAnchor);
             this.targetTop = this.startedTopPosition + this.actualDistance;
@@ -121,6 +129,7 @@ AutoScroller.prototype = {
             this.update();
             this.clearTimerId = setTimeout(this.endScroll.bind(this), 50000);
         } else {
+            if (this.resizeId !== -1 && this.autoResize) this.resizeId = setInterval(this.setScreenTop.bind(this), 500);
             setTimeout(this.endScroll.bind(this), 100);
         }
     },
@@ -135,7 +144,6 @@ AutoScroller.prototype = {
         this.targetAnchorIndex = -1;
         this.direction = 0;
         this.targetTop = 0;
-        this.targetAnchor = null;
         this.startedAt =  0;
         this.change =  0;
         this.screenHeight = 0;
@@ -146,7 +154,7 @@ AutoScroller.prototype = {
                 _self.skip.remove();
                 _self.skip = null;
             }, 250);
-        } else {
+        } else if (this.skip) {
             this.skip.remove();
             this.skip = null;
         }
@@ -167,6 +175,7 @@ AutoScroller.prototype = {
         if (this.useCallback && this.callTogether) this.callbackObject.update(this.startedAt);
 
         if (this.startedAt >= 1.0) {
+            if (this.autoResize) this.resizeId = setInterval(this.setScreenTop.bind(this), 500);
             if (this.useCallback){
                 if (this.callTogether) {
                     this.callbackObject.finish();
@@ -271,6 +280,25 @@ AutoScroller.prototype = {
         this.isSkipped = true;
         this.callbackObject.finish();
         if (!this.noticeEnd) this.endScroll();
+    },
+
+    onResize: function () {
+        var _self = this;
+        if (this.targetAnchor === null) return;
+        if (this.resizeId !== false) {
+            clearTimeout(this.resizeId);
+        }
+        this.resizeId = setTimeout(function () {
+            var currentTop = _self.calculateElementTop(_self.targetAnchor);
+            if (currentTop !== 0) window.scrollBy(0, currentTop);
+        }, 200);
+    },
+
+    setScreenTop: function () {
+        if (!this.needSetScreenTop) return;
+        var currentTop = this.calculateElementTop(this.targetAnchor);
+        if (currentTop === 0) return;
+        window.scrollBy(0, currentTop);
     },
 
     autoscroll: function (playback) {
